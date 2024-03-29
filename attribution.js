@@ -52,7 +52,7 @@
         });
 
         if (accounts.length > 0) {
-          console.log("Metamask Wallets:", metamaskWallets);
+          console.log("Metamask Wallets:", accounts);
           sessionStorage.setItem("sessionMetamaskFetched", true);
         }
 
