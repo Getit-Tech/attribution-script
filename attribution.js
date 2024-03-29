@@ -1,4 +1,20 @@
 (function () {
+  // Check if the script has already been executed for the current session
+  var sessionDataFetched = sessionStorage.getItem("sessionDataFetched");
+  // Check if the script has already fetched a non-empty array for Metamask accounts
+  var sessionMetamaskFetched = sessionStorage.getItem("sessionMetamaskFetched");
+
+  if (sessionDataFetched && sessionMetamaskFetched) {
+    return;
+  }
+  switch (true) {
+    case sessionDataFetched && sessionMetamaskFetched:
+      // If session data and non-empy Metamask accounts array have already been fetched, exit the script
+      return;
+    case sessionDataFetched && !sessionMetamaskFetched:
+      getMetamaskWallets();
+  }
+
   // Function to generate a UUID
   function generateUUID() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -34,12 +50,19 @@
         const accounts = await window.ethereum.request({
           method: "eth_accounts",
         });
+
+        if (accounts.length > 0) {
+          console.log("Metamask Wallets:", metamaskWallets);
+          sessionStorage.setItem("sessionMetamaskFetched", true);
+        }
+
         return accounts;
       } catch (error) {
         console.error("Failed to fetch Metamask wallets:", error);
         return [];
       }
     } else {
+      console.log("No window.ethereum object found.");
       return [];
     }
   }
@@ -66,15 +89,17 @@
     var deviceType = /Mobi/.test(navigator.userAgent) ? "Mobile" : "Desktop";
 
     // Fetch Metamask wallets array
-    getMetamaskWallets().then((metamaskWallets) => {
+    getMetamaskWallets().then(() => {
       // Log collected data to console
       console.log("User UUID:", userUUID);
       console.log("Source UTM:", sourceUTM);
-      console.log("Metamask Wallets:", metamaskWallets);
       console.log("Geo Location:", geo);
       console.log("Browser:", browser);
       console.log("Device OS:", deviceOS);
       console.log("Device Type:", deviceType);
+
+      // Set a flag in sessionStorage to indicate that session data has been fetched
+      sessionStorage.setItem("sessionDataFetched", true);
     });
   }
 
