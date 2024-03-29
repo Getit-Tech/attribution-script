@@ -13,6 +13,7 @@
       return;
     case sessionDataFetched && !sessionMetamaskFetched:
       getMetamaskWallets();
+      return;
   }
 
   // Function to generate a UUID
