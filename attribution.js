@@ -101,21 +101,18 @@
     var deviceOS = navigator.platform;
     var deviceType = /Mobi/.test(navigator.userAgent) ? "Mobile" : "Desktop";
 
-    // Fetch Metamask wallets array
-    getMetamaskWallets(clientId, sessionId).then(() => {
-      // Log collected data to console
-      console.log("User UUID:", userUUID);
-      console.log("Source UTM:", sourceUTM);
-      console.log("Geo Location:", geo);
-      console.log("Browser:", browser);
-      console.log("Device OS:", deviceOS);
-      console.log("Device Type:", deviceType);
-      console.log("Client ID:", clientId);
-      console.log("Session UUID", sessionId);
+    // Log collected data to console
+    console.log("User UUID:", userUUID);
+    console.log("Source UTM:", sourceUTM);
+    console.log("Geo Location:", geo);
+    console.log("Browser:", browser);
+    console.log("Device OS:", deviceOS);
+    console.log("Device Type:", deviceType);
+    console.log("Client ID:", clientId);
+    console.log("Session UUID", sessionId);
 
-      // Set a flag in sessionStorage to indicate that session data has been fetched
-      sessionStorage.setItem("sessionDataFetched", true);
-    });
+    // Set a flag in sessionStorage to indicate that session data has been fetched
+    sessionStorage.setItem("sessionDataFetched", true);
   }
 
   // Fetch client ID
@@ -128,9 +125,6 @@
   // Check if the script has already fetched a non-empty array for Metamask accounts
   var sessionMetamaskFetched = sessionStorage.getItem("sessionMetamaskFetched");
 
-  if (sessionDataFetched && sessionMetamaskFetched) {
-    return;
-  }
   switch (true) {
     case sessionDataFetched && sessionMetamaskFetched:
       // If session data and non-empy Metamask accounts array have already been fetched, exit the script
@@ -138,6 +132,8 @@
     case sessionDataFetched && !sessionMetamaskFetched:
       getMetamaskWallets(clientId, sessionId);
       return;
+    default:
+      getMetamaskWallets(clientId, sessionId);
   }
 
   // Track user session when the script is executed
