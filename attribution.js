@@ -1,5 +1,3 @@
-import { response } from "express";
-
 (function () {
   // Function to fetch client ID from the dataset attribute
   function getClientId() {
