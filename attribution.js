@@ -127,5 +127,5 @@
   }
 
   // Track user session when the script is executed
-  trackUserSession();
+  trackUserSession(clientId);
 })();
