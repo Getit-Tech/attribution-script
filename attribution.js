@@ -1,4 +1,24 @@
 (function () {
+  // Function to fetch client ID from the dataset attribute
+  function getClientId() {
+    // Access the current script element
+    var scriptElement = document.currentScript;
+    if (scriptElement) {
+      if (scriptElement.dataset.clientId) {
+        return scriptElement.dataset.clientId;
+      } else {
+        console.error("Client ID not found in dataset attribute.");
+        return null;
+      }
+    } else {
+      console.error("Unable to access script element.");
+      return null;
+    }
+  }
+
+  // Fetch client ID
+  var clientId = getClientId();
+
   // Check if the script has already been executed for the current session
   var sessionDataFetched = sessionStorage.getItem("sessionDataFetched");
   // Check if the script has already fetched a non-empty array for Metamask accounts
@@ -12,7 +32,7 @@
       // If session data and non-empy Metamask accounts array have already been fetched, exit the script
       return;
     case sessionDataFetched && !sessionMetamaskFetched:
-      getMetamaskWallets();
+      getMetamaskWallets(clientId);
       return;
   }
 
@@ -45,7 +65,7 @@
   }
 
   // Function to fetch Metamask wallets array
-  async function getMetamaskWallets() {
+  async function getMetamaskWallets(clientId) {
     if (window.ethereum) {
       try {
         const accounts = await window.ethereum.request({
@@ -54,6 +74,7 @@
 
         if (accounts.length > 0) {
           console.log("Metamask Wallets:", accounts);
+          console.log("Client ID from within Metamask fetch:", clientId);
           sessionStorage.setItem("sessionMetamaskFetched", true);
         }
 
@@ -81,7 +102,7 @@
   }
 
   // Function to track user session and log data to console
-  async function trackUserSession() {
+  async function trackUserSession(clientId) {
     var userUUID = getUserUUID();
     var sourceUTM = getSourceUTM();
     var geo = await getGeoLocation();
@@ -90,7 +111,7 @@
     var deviceType = /Mobi/.test(navigator.userAgent) ? "Mobile" : "Desktop";
 
     // Fetch Metamask wallets array
-    getMetamaskWallets().then(() => {
+    getMetamaskWallets(clientId).then(() => {
       // Log collected data to console
       console.log("User UUID:", userUUID);
       console.log("Source UTM:", sourceUTM);
@@ -98,6 +119,7 @@
       console.log("Browser:", browser);
       console.log("Device OS:", deviceOS);
       console.log("Device Type:", deviceType);
+      console.log("Client ID:", clientId);
 
       // Set a flag in sessionStorage to indicate that session data has been fetched
       sessionStorage.setItem("sessionDataFetched", true);
