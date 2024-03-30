@@ -55,7 +55,7 @@
   }
 
   // Function to fetch Metamask wallets array
-  async function getMetamaskWallets(clientId, sessionId) {
+  async function getMetamaskWallets(userUUID, sessionId) {
     if (window.ethereum) {
       try {
         const accounts = await window.ethereum.request({
@@ -64,7 +64,6 @@
 
         if (accounts.length > 0) {
           console.log("Metamask Wallets:", accounts);
-          console.log("Client ID from within Metamask fetch:", clientId);
           console.log("Session UUID from within Metamask fetch:", sessionId);
 
           const wallets = accounts;
@@ -110,7 +109,7 @@
   ) {
     try {
       const response = await fetch(
-        "https://attribution-be-9cfb674cc48a.herokuapp.com/user",
+        "https://attribution-be-9cfb674cc48a.herokuapp.com/users",
         {
           method: "POST",
           headers: {
@@ -145,7 +144,7 @@
   async function postUserWallets(sessionId, userUUID, wallets) {
     try {
       const response = await fetch(
-        "https://attribution-be-9cfb674cc48a.herokuapp.com/user/wallets",
+        "https://attribution-be-9cfb674cc48a.herokuapp.com/users/wallets",
         {
           method: "POST",
           headers: {
@@ -172,8 +171,7 @@
   }
 
   // Function to track user session and log data to console
-  async function trackUserSession(clientId, sessionId) {
-    var userUUID = getUserUUID();
+  async function trackUserSession(clientId, sessionId, userUUID) {
     var sourceUTM = getSourceUTM();
     var geo = await getGeoLocation();
     var browser = navigator.userAgent;
@@ -208,8 +206,10 @@
 
   // Fetch client ID
   var clientId = getClientId();
-  // Fetch sessionUUID
+  // Fetch session ID
   var sessionId = getSessionUUID();
+  // Fetch user UUID
+  var userUUID = getUserUUID();
 
   // Check if the script has already been executed for the current session
   var sessionDataFetched = sessionStorage.getItem("sessionDataFetched");
@@ -221,12 +221,12 @@
       // If session data and non-empy Metamask accounts array have already been fetched, exit the script
       return;
     case sessionDataFetched && !sessionMetamaskFetched:
-      getMetamaskWallets(clientId, sessionId);
+      getMetamaskWallets(userUUID, sessionId);
       return;
     default:
-      getMetamaskWallets(clientId, sessionId);
+      getMetamaskWallets(userUUID, sessionId);
   }
 
   // Track user session when the script is executed
-  trackUserSession(clientId, sessionId);
+  trackUserSession(clientId, sessionId, userUUID);
 })();
