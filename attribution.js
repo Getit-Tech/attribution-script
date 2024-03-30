@@ -1,3 +1,5 @@
+import { response } from "express";
+
 (function () {
   // Function to fetch client ID from the dataset attribute
   function getClientId() {
@@ -66,6 +68,11 @@
           console.log("Metamask Wallets:", accounts);
           console.log("Client ID from within Metamask fetch:", clientId);
           console.log("Session UUID from within Metamask fetch:", sessionId);
+
+          const wallets = accounts;
+          // Send POST to post user session wallets
+          await postUserWallets(sessionId, userUUID, wallets);
+
           sessionStorage.setItem("sessionMetamaskFetched", true);
         }
 
@@ -92,6 +99,80 @@
     }
   }
 
+  // Function to post user session data
+  async function postUser(
+    clientId,
+    sessionId,
+    userUUID,
+    sourceUTM,
+    geo,
+    browser,
+    deviceOS,
+    deviceType
+  ) {
+    try {
+      const response = await fetch(
+        "https://attribution-be-9cfb674cc48a.herokuapp.com/user",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            clientId,
+            sessionId,
+            userUUID,
+            sourceUTM,
+            geo,
+            browser,
+            deviceOS,
+            deviceType,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to post usersession data: ${response.statusText}`
+        );
+      }
+
+      console.log("User session data posted successfully");
+    } catch (error) {
+      console.error("Failed to post user data:", error);
+    }
+  }
+
+  // Function to post user wallet data for the session
+  async function postUserWallets(sessionId, userUUID, wallets) {
+    try {
+      const response = await fetch(
+        "https://attribution-be-9cfb674cc48a.herokuapp.com/user/wallets",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sessionId,
+            userUUID,
+            wallets,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to post user session wallets: ${response.statusText}`
+        );
+      }
+
+      console.log("User session wallets posted successfully.");
+    } catch (error) {
+      console.error("Failed to post user session wallets:", error);
+    }
+  }
+
   // Function to track user session and log data to console
   async function trackUserSession(clientId, sessionId) {
     var userUUID = getUserUUID();
@@ -110,6 +191,18 @@
     console.log("Device Type:", deviceType);
     console.log("Client ID:", clientId);
     console.log("Session UUID", sessionId);
+
+    // Send POST to post user session data
+    await postUser(
+      clientId,
+      sessionId,
+      userUUID,
+      sourceUTM,
+      geo,
+      browser,
+      deviceOS,
+      deviceType
+    );
 
     // Set a flag in sessionStorage to indicate that session data has been fetched
     sessionStorage.setItem("sessionDataFetched", true);
