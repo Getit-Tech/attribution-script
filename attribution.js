@@ -48,10 +48,9 @@
     return sessionUUID;
   }
 
-  // Function to retrieve source UTM
-  function getSourceUTM() {
-    var urlParams = new URLSearchParams(window.location.search);
-    return urlParams.toString();
+  // Function to retrieve source href
+  function getSourceHref() {
+    return window.location.href;
   }
 
   // Function to fetch Metamask wallets array
@@ -101,7 +100,7 @@
     clientId,
     sessionId,
     userUUID,
-    sourceUTM,
+    sourceHref,
     geo,
     browser,
     deviceOS,
@@ -119,7 +118,7 @@
             clientId,
             sessionId,
             userUUID,
-            sourceUTM,
+            sourceHref,
             geo,
             browser,
             deviceOS,
@@ -172,7 +171,7 @@
 
   // Function to track user session and log data to console
   async function trackUserSession(clientId, sessionId, userUUID) {
-    var sourceUTM = getSourceUTM();
+    var sourceHref = getSourceHref();
     var geo = await getGeoLocation();
     var browser = navigator.userAgent;
     var deviceOS = navigator.platform;
@@ -180,7 +179,7 @@
 
     // Log collected data to console
     console.log("User UUID:", userUUID);
-    console.log("Source UTM:", sourceUTM);
+    console.log("Source Href:", sourceHref);
     console.log("Geo Location:", geo);
     console.log("Browser:", browser);
     console.log("Device OS:", deviceOS);
@@ -193,7 +192,7 @@
       clientId,
       sessionId,
       userUUID,
-      sourceUTM,
+      sourceHref,
       geo,
       browser,
       deviceOS,
@@ -220,16 +219,11 @@
 
   // Check if both sessionDataFetched and sessionMetamaskFetched are true
   if (sessionDataFetched && sessionMetamaskFetched) {
-    console.log("Both true:", [sessionDataFetched, sessionMetamaskFetched]);
     // If session data and non-empty Metamask accounts array have already been fetched, exit the script
+    return;
   } else if (sessionDataFetched && !sessionMetamaskFetched) {
-    console.log("Session true, MM false:", [
-      sessionDataFetched,
-      sessionMetamaskFetched,
-    ]);
     getMetamaskWallets(userUUID, sessionId);
   } else {
-    console.log("None fetched:", [sessionDataFetched, sessionMetamaskFetched]);
     // Track user session when the script is executed
     trackUserSession(clientId, sessionId, userUUID);
   }
