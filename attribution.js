@@ -200,6 +200,8 @@
       deviceType
     );
 
+    getMetamaskWallets(userUUID, sessionId);
+
     // Set a flag in sessionStorage to indicate that session data has been fetched
     sessionStorage.setItem("sessionDataFetched", true);
   }
@@ -219,13 +221,12 @@
   switch (true) {
     case sessionDataFetched && sessionMetamaskFetched:
       // If session data and non-empy Metamask accounts array have already been fetched, exit the script
-      return;
+      break;
     case sessionDataFetched && !sessionMetamaskFetched:
       getMetamaskWallets(userUUID, sessionId);
       break;
     default:
       // Track user session when the script is executed
       trackUserSession(clientId, sessionId, userUUID);
-      getMetamaskWallets(userUUID, sessionId);
   }
 })();
