@@ -220,12 +220,21 @@
 
   switch (true) {
     case sessionDataFetched && sessionMetamaskFetched:
+      console.log("Both true:", [sessionDataFetched, sessionMetamaskFetched]);
       // If session data and non-empy Metamask accounts array have already been fetched, exit the script
       break;
     case sessionDataFetched && !sessionMetamaskFetched:
+      console.log("Session true, MM false:", [
+        sessionDataFetched,
+        sessionMetamaskFetched,
+      ]);
       getMetamaskWallets(userUUID, sessionId);
       break;
     default:
+      console.log("None fetched:", [
+        sessionDataFetched,
+        sessionMetamaskFetched,
+      ]);
       // Track user session when the script is executed
       trackUserSession(clientId, sessionId, userUUID);
   }
