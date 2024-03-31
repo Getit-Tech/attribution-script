@@ -222,7 +222,7 @@
       return;
     case sessionDataFetched && !sessionMetamaskFetched:
       getMetamaskWallets(userUUID, sessionId);
-      return;
+      break;
     default:
       // Track user session when the script is executed
       trackUserSession(clientId, sessionId, userUUID);
