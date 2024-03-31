@@ -218,25 +218,19 @@
   // Check if the script has already fetched a non-empty array for Metamask accounts
   var sessionMetamaskFetched = sessionStorage.getItem("sessionMetamaskFetched");
 
-  switch (true) {
-    case sessionDataFetched && sessionMetamaskFetched:
-      console.log("Both true:", [sessionDataFetched, sessionMetamaskFetched]);
-      // If session data and non-empy Metamask accounts array have already been fetched, exit the script
-      break;
-    case sessionDataFetched && !sessionMetamaskFetched:
-      console.log("Session true, MM false:", [
-        sessionDataFetched,
-        sessionMetamaskFetched,
-      ]);
-      getMetamaskWallets(userUUID, sessionId);
-      break;
-    default:
-      console.log("None fetched:", [
-        sessionDataFetched,
-        sessionMetamaskFetched,
-      ]);
-      // Track user session when the script is executed
-      trackUserSession(clientId, sessionId, userUUID);
-      break;
+  // Check if both sessionDataFetched and sessionMetamaskFetched are true
+  if (sessionDataFetched && sessionMetamaskFetched) {
+    console.log("Both true:", [sessionDataFetched, sessionMetamaskFetched]);
+    // If session data and non-empty Metamask accounts array have already been fetched, exit the script
+  } else if (sessionDataFetched && !sessionMetamaskFetched) {
+    console.log("Session true, MM false:", [
+      sessionDataFetched,
+      sessionMetamaskFetched,
+    ]);
+    getMetamaskWallets(userUUID, sessionId);
+  } else {
+    console.log("None fetched:", [sessionDataFetched, sessionMetamaskFetched]);
+    // Track user session when the script is executed
+    trackUserSession(clientId, sessionId, userUUID);
   }
 })();
