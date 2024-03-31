@@ -224,9 +224,8 @@
       getMetamaskWallets(userUUID, sessionId);
       return;
     default:
+      // Track user session when the script is executed
+      trackUserSession(clientId, sessionId, userUUID);
       getMetamaskWallets(userUUID, sessionId);
   }
-
-  // Track user session when the script is executed
-  trackUserSession(clientId, sessionId, userUUID);
 })();
