@@ -237,5 +237,6 @@
       ]);
       // Track user session when the script is executed
       trackUserSession(clientId, sessionId, userUUID);
+      break;
   }
 })();
