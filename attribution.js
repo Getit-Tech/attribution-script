@@ -109,7 +109,7 @@
   ) {
     try {
       const response = await fetch(
-        "https://gentle-cliffs-92462-3a61a9f36585.herokuapp.com/https://attribution-be-9cfb674cc48a.herokuapp.com/users",
+        "https://attribution-be-9cfb674cc48a.herokuapp.com/users",
         {
           method: "POST",
           headers: {
@@ -144,7 +144,7 @@
   async function postUserWallets(sessionId, userUUID, wallets) {
     try {
       const response = await fetch(
-        "https://gentle-cliffs-92462-3a61a9f36585.herokuapp.com/https://attribution-be-9cfb674cc48a.herokuapp.com/users/wallets",
+        "https://attribution-be-9cfb674cc48a.herokuapp.com/users/wallets",
         {
           method: "POST",
           headers: {
