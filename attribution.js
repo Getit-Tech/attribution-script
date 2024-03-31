@@ -48,9 +48,10 @@
     return sessionUUID;
   }
 
-  // Function to retrieve source href
-  function getSourceHref() {
-    return window.location.href;
+  // Function to retrieve source UTM
+  function getSourceUTM() {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.toString();
   }
 
   // Function to fetch Metamask wallets array
@@ -100,7 +101,7 @@
     clientId,
     sessionId,
     userUUID,
-    sourceHref,
+    sourceUTM,
     geo,
     browser,
     deviceOS,
@@ -118,7 +119,7 @@
             clientId,
             sessionId,
             userUUID,
-            sourceHref,
+            sourceUTM,
             geo,
             browser,
             deviceOS,
@@ -171,7 +172,7 @@
 
   // Function to track user session and log data to console
   async function trackUserSession(clientId, sessionId, userUUID) {
-    var sourceHref = getSourceHref();
+    var sourceUTM = getSourceUTM();
     var geo = await getGeoLocation();
     var browser = navigator.userAgent;
     var deviceOS = navigator.platform;
@@ -179,7 +180,7 @@
 
     // Log collected data to console
     console.log("User UUID:", userUUID);
-    console.log("Source Href:", sourceHref);
+    console.log("Source UTM:", sourceUTM);
     console.log("Geo Location:", geo);
     console.log("Browser:", browser);
     console.log("Device OS:", deviceOS);
@@ -192,7 +193,7 @@
       clientId,
       sessionId,
       userUUID,
-      sourceHref,
+      sourceUTM,
       geo,
       browser,
       deviceOS,
